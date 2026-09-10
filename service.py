@@ -56,3 +56,10 @@ class AlarmService:
                     save_alarms(self.alarms)
                     return True
             return False
+
+
+    def update_alarm_state(self, alarm: Alarm) -> None:
+        """Persist state mutations originating from the background scheduler."""
+        with self._lock:
+            alarm.updated_at = datetime.now()
+            save_alarms(self.alarms)
