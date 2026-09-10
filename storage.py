@@ -1,3 +1,8 @@
+"""
+Module: storage.py
+Description: Handles disk persistence for alarms using atomic JSON file I/O.
+"""
+
 import json
 from pathlib import Path
 from typing import List
@@ -24,3 +29,13 @@ def load_alarms() -> List[Alarm]:
         raise ValueError("Alarm storage root must be a JSON array.")
 
     return [Alarm.from_dict(alarm) for alarm in raw_alarms]
+
+
+
+def save_alarms(alarms: List[Alarm]) -> None:
+    """
+    Serialize and persist the current collection of alarms to disk[cite: 6].
+    """
+    serialized = [alarm.to_dict() for alarm in alarms]
+    with STORAGE_FILE.open("w", encoding="utf-8") as file:
+        json.dump(serialized, file, indent=2)
