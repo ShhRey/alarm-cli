@@ -22,3 +22,20 @@ class AlarmStatus(Enum):
     TRIGGERED = "triggered"
     SNOOZED = "snoozed"
     CANCELLED = "cancelled"
+
+
+
+@dataclass
+class Alarm:
+    """
+    Core domain model representing an alarm.
+    Maintains timing, metadata, and persistence mapping.
+    """
+    time: datetime
+    name: str
+    message: str
+    alarm_type: AlarmType = AlarmType.ONCE
+    snooze_minutes: int = 5
+    status: AlarmStatus = AlarmStatus.ACTIVE
+    created_at: datetime = field(default_factory=datetime.now)
+    updated_at: datetime = field(default_factory=datetime.now)
