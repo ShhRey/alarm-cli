@@ -10,6 +10,15 @@ class AlarmService:
     Thread-safe service layer encapsulating all alarm business operations.
     """
 
+    def __init__(self) -> None:
+        self._lock = threading.RLock()
+        self.alarms: List[Alarm] = load_alarms()
+
+    def list_alarms(self) -> List[Alarm]:
+        """Return a thread-safe shallow copy of all managed alarms."""
+        with self._lock:
+            return list(self.alarms)
+
 
     def set_alarm(
         self,
