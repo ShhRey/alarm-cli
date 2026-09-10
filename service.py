@@ -44,3 +44,15 @@ class AlarmService:
             self.alarms.append(alarm)
             save_alarms(self.alarms)
             return alarm
+
+
+    def cancel_alarm(self, alarm_time: datetime) -> bool:
+        """Cancel the first active alarm matching the given target time."""
+        with self._lock:
+            for alarm in self.alarms:
+                if alarm.time == alarm_time and alarm.status == AlarmStatus.ACTIVE:
+                    alarm.status = AlarmStatus.CANCELLED
+                    alarm.updated_at = datetime.now()
+                    save_alarms(self.alarms)
+                    return True
+            return False
